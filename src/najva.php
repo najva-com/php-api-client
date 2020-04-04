@@ -1,5 +1,8 @@
 <?php
 class Najva {
+    
+    private $segments_url = "";
+    private $accounts_url = "";
 
     private $api_key;
     private $token;
@@ -20,8 +23,6 @@ class Najva {
 
         $body = $this->buildBody($notification);
 
-        echo $body;
-
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
         curl_setopt($ch, CURLOPT_HEADER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -30,6 +31,44 @@ class Najva {
 
         $result = curl_exec($ch);
 
+        return $result;
+    }
+    
+    function getSegments(){
+        $ch = curl_init($this->segments_url);
+        
+        $headers = array(
+            'cache_control: no-cache',
+            'content-type: application/json',
+            'authorization: Token'. $this->token
+        );
+        
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER $header);
+        curl_setopt$ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $result = curl_exec(ch);
+        
+        return $result;
+    }
+    
+    function getAccounts(){
+        $ch = curl_init($accounts_url);
+        
+        $headers = array(
+            'cache_control: no-cache',
+            'content-type: application/json',
+            'authorization: Token'. $this->token
+        );
+        
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER $header);
+        curl_setopt$ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $result = curl_exec($ch);
+        
         return $result;
     }
 
