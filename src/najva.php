@@ -1,8 +1,8 @@
 <?php
 class Najva {
     
-    private $segments_url = "";
-    private $accounts_url = "";
+    private $segments_url = "https://app.najva.com/api/v1/websites/<website-api-key>/segments/";
+    private $accounts_url = "https://app.najva.com/api/v1/one-signals/";
 
     private $api_key;
     private $token;
@@ -31,24 +31,35 @@ class Najva {
 
         $result = curl_exec($ch);
 
+        curl_close($ch);
+
         return $result;
+    }
+
+    function getSegmentsUrl(){
+        return "https://app.najva.com/api/v1/websites/". $this->api_key ."/segments/";
     }
     
     function getSegments(){
-        $ch = curl_init($this->segments_url);
+        $ch = curl_init($this->getSegmentsUrl());
+
+        echo $this->getSegmentsUrl();
         
         $headers = array(
             'cache_control: no-cache',
             'content-type: application/json',
-            'authorization: Token'. $this->token
+            'authorization: Token '. $this->token
         );
         
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER $header);
-        curl_setopt$ch, CURLOPT_RETURNTRANSFER, true);
-        
-        $result = curl_exec(ch);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+
+        echo $result;
+
+        curl_close($ch);
         
         return $result;
     }
@@ -59,15 +70,18 @@ class Najva {
         $headers = array(
             'cache_control: no-cache',
             'content-type: application/json',
-            'authorization: Token'. $this->token
+            'authorization: Token '. $this->token
         );
         
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER $header);
-        curl_setopt$ch, CURLOPT_RETURNTRANSFER, true);
-        
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
         $result = curl_exec($ch);
+
+        curl_close($ch);
+
+        echo $result;
         
         return $result;
     }
@@ -164,4 +178,36 @@ class Notification {
     public $oneSignalAccounts;
     public $subscribersToken;
 }
+
+$api_key = "ad4692ae-8f37-4883-a0fa-aac58ae55a86";
+$token = "b32aefa32fd46b2b413990792be0bbc0391e45c3";
+$najva = new Najva($api_key,$token);
+
+$res = $najva->getSegments();
+
+echo "hello";
+echo $res;
+
+$res = $najva->getAccounts();
+
+echo $res;
+
+$notification = new Notification(true);
+$notification->title = "test title";
+$notification->body = "test body";
+$notification->onClickAction = "open-link";
+$notification->url = "https://najva.com";
+$notification->content = "nothing special";
+$notification->json = array(
+    'key'=>'value',
+    'key2'=>'value2'
+);
+$notification->icon = "https://www.ait-themes.club/wp-content/uploads/cache/images/2020/02/guestblog_featured/guestblog_featured-482918665.jpg";
+$notification->image = "https://www.ait-themes.club/wp-content/uploads/cache/images/2020/02/guestblog_featured/guestblog_featured-482918665.jpg";
+$notification->sentTime = "2020-02-22T15:30:00";
+
+// $res = $najva->sendNotification($notification);
+
+// echo $res;
+
 ?>
