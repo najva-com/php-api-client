@@ -42,8 +42,6 @@ class Najva {
     
     function getSegments(){
         $ch = curl_init($this->getSegmentsUrl());
-
-        echo $this->getSegmentsUrl();
         
         $headers = array(
             'cache_control: no-cache',
@@ -56,8 +54,6 @@ class Najva {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $result = curl_exec($ch);
-
-        echo $result;
 
         curl_close($ch);
         
@@ -65,7 +61,7 @@ class Najva {
     }
     
     function getAccounts(){
-        $ch = curl_init($accounts_url);
+        $ch = curl_init($this->accounts_url);
         
         $headers = array(
             'cache_control: no-cache',
@@ -80,8 +76,6 @@ class Najva {
         $result = curl_exec($ch);
 
         curl_close($ch);
-
-        echo $result;
         
         return $result;
     }
@@ -179,35 +173,5 @@ class Notification {
     public $subscribersToken;
 }
 
-$api_key = "ad4692ae-8f37-4883-a0fa-aac58ae55a86";
-$token = "b32aefa32fd46b2b413990792be0bbc0391e45c3";
-$najva = new Najva($api_key,$token);
-
-$res = $najva->getSegments();
-
-echo "hello";
-echo $res;
-
-$res = $najva->getAccounts();
-
-echo $res;
-
-$notification = new Notification(true);
-$notification->title = "test title";
-$notification->body = "test body";
-$notification->onClickAction = "open-link";
-$notification->url = "https://najva.com";
-$notification->content = "nothing special";
-$notification->json = array(
-    'key'=>'value',
-    'key2'=>'value2'
-);
-$notification->icon = "https://www.ait-themes.club/wp-content/uploads/cache/images/2020/02/guestblog_featured/guestblog_featured-482918665.jpg";
-$notification->image = "https://www.ait-themes.club/wp-content/uploads/cache/images/2020/02/guestblog_featured/guestblog_featured-482918665.jpg";
-$notification->sentTime = "2020-02-22T15:30:00";
-
-// $res = $najva->sendNotification($notification);
-
-// echo $res;
 
 ?>
