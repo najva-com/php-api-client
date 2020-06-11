@@ -103,7 +103,7 @@ class Najva {
             }
         } else {
             $body .=
-            $this->buildList("subscriber_tokens", $notification->subscribersToken).',';
+            $this->buildTokens("subscriber_tokens", $notification->subscribersToken).',';
         }
         $body .= $this->buildJson("json",$notification->json).'}';
         return $body;
@@ -121,6 +121,21 @@ class Najva {
                 $body .= ',';
             }
             $body .= $list[$i];
+        }
+        $body .= ']';
+        return $body;
+    }
+    
+    private function buildTokens($key, $list){
+        $body = '"'.$key.'"'.':';
+        $body .= '[';
+        for ($i=0;$i<count($list);$i++){
+            if ($i != 0){
+                $body .= ',';
+            }
+            $body .= '"';
+            $body .= $list[$i];
+            $body .= '"';
         }
         $body .= ']';
         return $body;
