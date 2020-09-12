@@ -80,30 +80,29 @@ class Najva {
         return $result;
     }
 
-    private function buildBody($notification){
-        $body =  '{'.
-            $this->buildItem("api_key",$this->api_key).','.
-            $this->buildItem("title",$notification->title).','.
-            $this->buildItem("body",$notification->body).','.
-            $this->buildItem("url",$notification->url).','.
-            $this->buildItem("content",$notification->content).','.
-            $this->buildItem("image",$notification->image).','.
-            $this->buildItem("icon",$notification->icon).','.
-            $this->buildItem("onclick_action",$notification->onClickAction).','.
-            $this->buildItem("sent_time",$notification->sentTime).',';
+    function buildBody($notification){
+        $body =  '{'.'"api_key"'.':'.'"'.$this->api_key.'"'.
+            $this->buildItem("title",$notification->title).
+            $this->buildItem("body",$notification->body).
+            $this->buildItem("url",$notification->url).
+            $this->buildItem("content",$notification->content).
+            $this->buildItem("image",$notification->image).
+            $this->buildItem("icon",$notification->icon).
+            $this->buildItem("onclick_action",$notification->onClickAction).
+            $this->buildItem("sent_time",$notification->sentTime);
         if ($notification->sendToAll){
             $body .=
-            $this->buildList("segments_include",$notification->segmentInclude).','.
-            $this->buildList("segment_exclude", $notification->segmentExclude).','.
-            $this->buildList("one_signal_accounts", $notification->oneSignalAccounts).',';
+            $this->buildList("segments_include",$notification->segmentInclude).
+            $this->buildList("segment_exclude", $notification->segmentExclude).
+            $this->buildList("one_signal_accounts", $notification->oneSignalAccounts);
             if ($notification->oneSignalEnabled){
-                $body .= $this->buildItem("one_signal_enabled", "true").',';
+                $body .= $this->buildItem("one_signal_enabled", "true");
             } else {
-                $body .= $this->buildItem("one_signal_enabled", "false").',';
+                $body .= $this->buildItem("one_signal_enabled", "false");
             }
         } else {
             $body .=
-            $this->buildTokens("subscriber_tokens", $notification->subscribersToken).',';
+            $this->buildTokens("subscriber_tokens", $notification->subscribersToken);
         }
         $body .= $this->buildJson("json",$notification->json).'}';
         return $body;
@@ -113,14 +112,14 @@ class Najva {
         if(is_null($value)){
             return '';
         }
-        return '"'.$key.'"'.':'.'"'.$value.'"';
+        return ',"'.$key.'"'.':'.'"'.$value.'"';
     }
 
     private function buildList($key, $list){
         if(is_null($list)){
-            return ''
+            return '';
         }
-        $body = '"'.$key.'"'.':';
+        $body = ',"'.$key.'"'.':';
         $body .= '[';
         for ($i=0;$i<count($list);$i++){
             if ($i != 0){
@@ -133,7 +132,7 @@ class Najva {
     }
     
     private function buildTokens($key, $list){
-        $body = '"'.$key.'"'.':';
+        $body = ',"'.$key.'"'.':';
         $body .= '[';
         for ($i=0;$i<count($list);$i++){
             if ($i != 0){
@@ -151,7 +150,7 @@ class Najva {
         if(is_null($json)){
             return '';
         }
-        $body = '"'.$key.'"'.':';
+        $body = ',"'.$key.'"'.':';
         $body .= '"{';
         $temp = false;
         foreach($json as $x => $x_value){
@@ -198,4 +197,19 @@ class Notification {
 }
 
 
+$notification = new Notification(true);
+$notification->title = "title";
+$notification->body = "body";
+$notification->onClickAction = "action";
+$notification->url = "url";
+$notification->icon = "icon";
+//$notification->image = $icon;
+$notification->sentTime = "time";
+
+$najva = new Najva("api", "token");
+// $result = $najva->sendNotification($notification);
+// echo $result;
+
+$body = $najva->buildBody($notification);
+echo $body;
 ?>
