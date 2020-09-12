@@ -117,6 +117,9 @@ class Najva {
     }
 
     private function buildList($key, $list){
+        ifis_null($list){
+            return ''
+        }
         $body = '"'.$key.'"'.':';
         $body .= '[';
         for ($i=0;$i<count($list);$i++){
@@ -145,6 +148,9 @@ class Najva {
     }
 
     private function buildJson($key,$json){
+        if(is_null($json)){
+            return '';
+        }
         $body = '"'.$key.'"'.':';
         $body .= '"{';
         $temp = false;
