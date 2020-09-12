@@ -196,20 +196,4 @@ class Notification {
     public $subscribersToken;
 }
 
-
-$notification = new Notification(true);
-$notification->title = "title";
-$notification->body = "body";
-$notification->onClickAction = "action";
-$notification->url = "url";
-$notification->icon = "icon";
-//$notification->image = $icon;
-$notification->sentTime = "time";
-
-$najva = new Najva("api", "token");
-// $result = $najva->sendNotification($notification);
-// echo $result;
-
-$body = $najva->buildBody($notification);
-echo $body;
 ?>
