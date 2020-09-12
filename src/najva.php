@@ -117,7 +117,7 @@ class Najva {
     }
 
     private function buildList($key, $list){
-        ifis_null($list){
+        if(is_null($list)){
             return ''
         }
         $body = '"'.$key.'"'.':';
