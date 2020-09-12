@@ -110,6 +110,9 @@ class Najva {
     }
 
     private function buildItem($key,$value){
+        if(is_null($value)){
+            return '';
+        }
         return '"'.$key.'"'.':'.'"'.$value.'"';
     }
 
