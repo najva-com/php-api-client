@@ -18,7 +18,8 @@ class Najva {
         $headers = array(
             'cache-control: no-cache',
             'content-type: application/json',
-            'authorization: Token '. $this->token
+            'authorization: Token '. $this->token,
+            'X-api-key: '.  $this->api_key
         );
 
         $body = $this->buildBody($notification);
@@ -81,28 +82,22 @@ class Najva {
     }
 
     function buildBody($notification){
-        $body =  '{'.'"api_key"'.':'.'"'.$this->api_key.'"'.
+        $body =  '{'.
             $this->buildItem("title",$notification->title).
             $this->buildItem("body",$notification->body).
+            $this->buildItem("onclick_action",$notification->onClickAction).
             $this->buildItem("url",$notification->url).
             $this->buildItem("content",$notification->content).
             $this->buildItem("image",$notification->image).
             $this->buildItem("icon",$notification->icon).
-            $this->buildItem("onclick_action",$notification->onClickAction).
             $this->buildItem("sent_time",$notification->sentTime);
         if ($notification->sendToAll){
             $body .=
             $this->buildList("segments_include",$notification->segmentInclude).
             $this->buildList("segment_exclude", $notification->segmentExclude).
-            $this->buildList("one_signal_accounts", $notification->oneSignalAccounts);
-            if ($notification->oneSignalEnabled){
-                $body .= $this->buildItem("one_signal_enabled", "true");
-            } else {
-                $body .= $this->buildItem("one_signal_enabled", "false");
-            }
         } else {
             $body .=
-            $this->buildTokens("subscriber_tokens", $notification->subscribersToken);
+            $this->buildTokens("subscribers", $notification->subscribersToken);
         }
         $body .= $this->buildJson("json",$notification->json).'}';
         return $body;
@@ -174,12 +169,12 @@ class Notification {
     function __construct($sendToAll){
         $this->sendToAll = $sendToAll;
         if ($sendToAll == true){
-            $this->destination = "https://app.najva.com/api/v1/notifications/";
+            $this->destination = "https://app.najva.com/api/v2/notification/management/send-campaign/";
         } else {
-            $this->destination = "https://app.najva.com/notification/api/v1/notifications/";
+            $this->destination = "https://app.najva.com/api/v2/notification/management/send-direct/";
         }
     }
-
+    
     public $title;
     public $body;
     public $onClickAction;
